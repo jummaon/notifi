@@ -1,31 +1,30 @@
-// Кнопка для запроса разрешения
-const notifyBtn = document.getElementById('notify-btn');
+// Проверяем разрешение и планируем уведомление
+function requestPermissionAndScheduleNotification() {
+    Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+            console.log('Уведомления разрешены');
+            scheduleNotification();
+        } else {
+            console.log('Уведомления запрещены');
+        }
+    });
+}
 
-// Функция для запроса разрешения
-notifyBtn.addEventListener('click', async () => {
-    const permission = await Notification.requestPermission();
-
-    if (permission === 'granted') {
-        alert('Уведомления разрешены! Мы отправим уведомление через несколько минут.');
-        scheduleNotification();
-    } else {
-        alert('Вы отклонили разрешение на уведомления.');
-    }
-});
-
-// Функция для планирования уведомления
+// Планируем уведомление через минуту
 function scheduleNotification() {
-    // Регистрация Service Worker
     navigator.serviceWorker.register('service-worker.js').then((registration) => {
         console.log('Service Worker зарегистрирован');
 
-        // Отправка уведомления через 1 минуту
+        // Уведомление через 1 минуту
         setTimeout(() => {
-            registration.showNotification('Ассалом!', {
+            registration.showNotification('Привет снова!', {
                 body: 'У вас в карзине 2 товар! Купите сегодня и получите 10% скидки и бесплатная доставка😉!',
-                icon: 'https://via.placeholder.com/128', // Добавьте ссылку на иконку
-                tag: 'return-notification', // Уникальный тег уведомления
+                icon: 'https://via.placeholder.com/128', // Добавьте вашу иконку
+                tag: 'repeat-notification',
             });
-        }, 60000); // 60000 мс = 1 минута
+        }, 60000); // Через 1 минуту (60 000 мс)
     });
 }
+
+// Вызываем функцию каждый раз при загрузке страницы
+requestPermissionAndScheduleNotification();

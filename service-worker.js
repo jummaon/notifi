@@ -3,9 +3,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-    event.notification.close(); // Закрытие уведомления
-
-    // Открыть сайт, если уведомление нажато
+    event.notification.close(); // Закрыть уведомление
     event.waitUntil(
         clients.openWindow('https://yourwebsite.com') // Замените на ваш URL
     );
